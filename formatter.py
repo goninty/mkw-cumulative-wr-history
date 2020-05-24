@@ -3,7 +3,7 @@ from datetime import datetime, date, timedelta
 import json
 
 days = [d.strftime('%Y-%m-%d') for d in pd.date_range("2008-04-12", date.today())]
-#days = dict.fromkeys([d.strftime('%Y-%m-%d') for d in pd.date_range("2008-04-12", date.today())])
+days_dict = dict.fromkeys([d.strftime('%Y-%m-%d') for d in pd.date_range("2008-04-12", date.today())])
 
 f = open("history.txt", "r")
 tracks = json.loads(f.read())
@@ -62,4 +62,9 @@ def cumuls_for_day(day) :
     return day_cumuls
 
 for i in range(len(days)):
-    print(days[i] + ": " + str(cumuls_for_day(get_wrs_for_day(i))))
+    days_dict[days[i]] = cumuls_for_day(get_wrs_for_day(i))
+
+# write json to file
+f = open("cumuls.txt", "w")
+f.write(json.dumps(days_dict))
+f.close()
