@@ -45,7 +45,7 @@ def cumuls_for_day(day) :
         cumul += latest[0]
         prev_times.append(latest[0])
         latest.pop(0)
-    day_cumuls.append(str(cumul))
+    day_cumuls.append(str(cumul.total_seconds()))
 
     # this is for the subsequent cumulative times
     while any(day):
@@ -58,13 +58,13 @@ def cumuls_for_day(day) :
                 cumul -= (prev - latest[0])
                 prev_times[i] = latest[0]
                 latest.pop(0)
-        day_cumuls.append(str(cumul))
+        day_cumuls.append(str(cumul.total_seconds()))
     return day_cumuls
 
 for i in range(len(days)):
     days_dict[days[i]] = cumuls_for_day(get_wrs_for_day(i))
 
 # write json to file
-f = open("cumuls.txt", "w")
+f = open("cumuls_seconds.txt", "w")
 f.write(json.dumps(days_dict))
 f.close()
