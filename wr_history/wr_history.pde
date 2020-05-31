@@ -12,6 +12,7 @@ ArrayList<Float[]> points;
 int day;
 
 PFont f;
+float diffSecs; // used for the time text on the side
 
 void setup() {
   size(1280, 720);
@@ -19,44 +20,66 @@ void setup() {
  
   loadData();
   //println(wrsSeconds.get("2008-04-12"));
-  
+  diffSecs = 0;
   points = new ArrayList();
   day = 0;
   f = createFont("Arial", 36, true);
 }
 
 void draw() {
+  // DO COOL PANOUT AT END POG
   background(0, 255, 0);
   stroke(128);
   strokeWeight(1);
   line(0, height/2, width, height/2);
   line(width/2, 0, width/2, height);
   
-  strokeWeight(5);
   stroke(2, 174, 238); // mkwii light blue
+  strokeWeight(5);
   
   // need to actually have it go down multiple times a day
-  y = wrsSeconds.get(dates.get(day))[0] / 5;
-  points.add(new Float[]{(float) width/2, (height-y)*3});
+  y = wrsSeconds.get(dates.get(day))[0] * 20;
+  points.add(new Float[]{(float) day, y}); // raw curr point
   
-  int j = points.size();
-  for (int i = 0; i < points.size()-2; i++) {
-    line(points.get(i)[0]-j-1, points.get(i)[1], 
-         points.get(i+1)[0]-j, points.get(i+1)[1]);
-    j--;
+  if (day == 0) {
+    point(width/2, height/2);
+  } else {
+    float currX = width/2;
+    float currY = height/2;
+    float prevX = width/2 - 1;
+    float prevY = currY - (points.get(points.size()-2)[1] - points.get(points.size()-1)[1]);
+    diffSecs += points.get(points.size()-2)[1] - points.get(points.size()-1)[1];
+    
+    line(prevX, prevY, currX, currY);
+    
+    // gonna use that when moving it back
+    int j = 0;
+    // now can not care about plotting at centre
+    for (int i=points.size()-2; i > 0; i--) {
+      
+      prevX = width/2 - j - 1;
+      prevY = prevY - (points.get(i-1)[1] - points.get(i)[1]);
+      currX = width/2 - j;
+      currY = currY - (points.get(i)[1] - points.get(i+1)[1]);
+      
+      
+      line(prevX, prevY, currX, currY);
+      j++;
+    }
   }
-  
-  strokeWeight(10);
-  point(points.get(points.size()-1)[0], points.get(points.size()-1)[1]);
 
   // show date
   textFont(f);
   fill(0);
-  text(dates.get(day), 20, 50);
+  String date = dates.get(day);
+  text(date, 20, 50);
+  text(wrsSeconds.get(dates.get(0))[0] - diffSecs, 40, 100);
+  text(wrs.get(date)[0], 20, height/2);
 
   day++;
-  
+  //delay();
 }
+
 
 void loadData() {
   jsonWRs = loadJSONObject("wrs.json"); // load in json
