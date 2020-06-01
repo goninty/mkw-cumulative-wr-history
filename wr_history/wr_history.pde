@@ -71,15 +71,26 @@ void draw() {
       currX = width/2 - j;
       currY = currY - (points.get(i)[1] - points.get(i+1)[1]);
       
-      if ((points.get(i+1)[1] - floor(points.get(i+1)[1])) < .005) {
-        text(floor(points.get(i+1)[1]), 20, currY);
-      }
+      //if ((points.get(i+1)[1] - floor(points.get(i+1)[1])) < .005) {
+      //  text(floor(points.get(i+1)[1]), 20, currY);
+      //}
       
       
       line(prevX, prevY, currX, currY);
       j++;
     }
   }
+  println(points.get(0)[1]);
+  // 3714.051
+  // day 1: 1:01:54.051
+  stroke(128);
+  strokeWeight(1);
+  text("1:01:00", 20, height/2 - diffSecs + 54.051);
+  line(0, height/2 - diffSecs + 54.051, width, height/2 - diffSecs + 54.051);
+  text("1:00:00", 20, height/2 - diffSecs + + 54.051 + 60);
+  text("59:00", 20, height/2 - diffSecs + + 54.051 + 120);
+  text("58:00", 20, height/2 - diffSecs + + 54.051 + 180);
+  
 
   // show date
   textFont(f);
