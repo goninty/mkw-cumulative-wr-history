@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 JSONObject jsonWRs;
 JSONObject jsonSeconds;
 JSONObject datesJSON;
@@ -10,6 +12,7 @@ float x, y;
 ArrayList<Float[]> points;
 
 int day;
+ArrayList<Float> dayTimes;
 
 PFont f;
 float diffSecs; // used for the time text on the side
@@ -23,6 +26,7 @@ void setup() {
   diffSecs = 0;
   points = new ArrayList();
   day = 0;
+  dayTimes = new ArrayList<Float>(Arrays.asList(wrsSeconds.get(dates.get(day))));
   f = createFont("Arial", 36, true);
 }
 
@@ -35,11 +39,16 @@ void draw() {
   line(width/2, 0, width/2, height);
   
   stroke(2, 174, 238); // mkwii light blue
-  strokeWeight(5);
+  strokeWeight(15);
   
   // need to actually have it go down multiple times a day
-  y = wrsSeconds.get(dates.get(day))[0] * 20;
+  
+  //println(dayTimes.get(0));
+  y = dayTimes.get(0);
   points.add(new Float[]{(float) day, y}); // raw curr point
+  point(width/2, height/2);
+  
+  strokeWeight(6);
   
   if (day == 0) {
     point(width/2, height/2);
@@ -62,6 +71,10 @@ void draw() {
       currX = width/2 - j;
       currY = currY - (points.get(i)[1] - points.get(i+1)[1]);
       
+      if ((points.get(i+1)[1] - floor(points.get(i+1)[1])) < .005) {
+        text(floor(points.get(i+1)[1]), 20, currY);
+      }
+      
       
       line(prevX, prevY, currX, currY);
       j++;
@@ -73,11 +86,16 @@ void draw() {
   fill(0);
   String date = dates.get(day);
   text(date, 20, 50);
-  text(wrsSeconds.get(dates.get(0))[0] - diffSecs, 40, 100);
-  text(wrs.get(date)[0], 20, height/2);
-
-  day++;
-  //delay();
+  //text(wrsSeconds.get(dates.get(0))[0] - diffSecs, 40, 100);
+  //text(wrs.get(date)[0], 20, height/2);
+  
+  if (dayTimes.size() > 1) {
+    dayTimes.remove(0);
+  } else {
+    day++;
+    dayTimes = new ArrayList<Float>(Arrays.asList(wrsSeconds.get(dates.get(day))));
+  }
+  //delay(50);
 }
 
 
