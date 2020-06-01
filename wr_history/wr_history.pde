@@ -35,8 +35,20 @@ void draw() {
   background(0, 255, 0);
   stroke(128);
   strokeWeight(1);
-  line(0, height/2, width, height/2);
-  line(width/2, 0, width/2, height);
+  //line(0, height/2, width, height/2);
+  //line(width/2, 0, width/2, height);
+  
+  int firstTime = 3660; // 3714.051 secs
+  int interval = 120;
+  for (int i=0; i<100; i++) {
+    int time = firstTime - (interval*i);
+    float yLine = height/2 - diffSecs + 54.051 + (interval*i);
+    text(String.format("%d'%d\"000", floor(time/60), time % 60),
+          20, yLine);
+    line(0, yLine, width, yLine);
+  }
+  text("61'54\"051", 20, height/2 - diffSecs);
+  line(0, height/2 - diffSecs, width, height/2 - diffSecs);
   
   stroke(2, 174, 238); // mkwii light blue
   strokeWeight(15);
@@ -83,14 +95,6 @@ void draw() {
   println(points.get(0)[1]);
   // 3714.051
   // day 1: 1:01:54.051
-  stroke(128);
-  strokeWeight(1);
-  text("1:01:00", 20, height/2 - diffSecs + 54.051);
-  line(0, height/2 - diffSecs + 54.051, width, height/2 - diffSecs + 54.051);
-  text("1:00:00", 20, height/2 - diffSecs + + 54.051 + 60);
-  text("59:00", 20, height/2 - diffSecs + + 54.051 + 120);
-  text("58:00", 20, height/2 - diffSecs + + 54.051 + 180);
-  
 
   // show date
   textFont(f);
