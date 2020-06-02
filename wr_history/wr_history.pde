@@ -17,8 +17,8 @@ ArrayList<Float> dayTimes;
 PFont f;
 float diffSecs; // used for the time text on the side
 
-int scaler; // used to scale the data
-int pixelsForDay;
+float scaler; // used to scale the data
+float pixelsForDay;
 
 void setup() {
   size(1280, 720);
@@ -32,10 +32,11 @@ void setup() {
   dayTimes = new ArrayList<Float>(Arrays.asList(wrsSeconds.get(dates.get(day))));
   f = createFont("Arial", 36, true);
   
-  scaler = 3;
-  pixelsForDay = 20;
+  scaler = 1;
+  pixelsForDay = 100;
 }
-
+// TODO: sort out horizontal intervals, theyre not consistent with days
+// this will be a problem when trying to draw vertical lines
 void draw() {
   // DO COOL PANOUT AT END POG
   background(0, 255, 0);
@@ -59,15 +60,24 @@ void draw() {
     // always plot current at centre
     float currX = width/2;
     float currY = height/2;
+    
     // move previous one left by however many pixels we want to represent a day
-    float prevX = width/2 - pixelsForDay;
+    float prevX;
+    
+    // if they're on the same day
+    if (points.get(points.size()-2)[0] == points.get(points.size()-1)[0]) {
+      prevX = width/2 - (pixelsForDay / points.size());
+    } else { // if they're on different days
+      prevX = width/2 - pixelsForDay;
+    }
+    
     // calc how far to move previous one up
     float prevY = currY - (points.get(points.size()-2)[1] - points.get(points.size()-1)[1]);
     
     line(prevX, prevY, currX, currY);
     
     // gonna use that when moving it back
-    int j = pixelsForDay;
+    float j = pixelsForDay;
     // now can not care about plotting at centre
     for (int i=points.size()-2; i > 0; i--) {
         
